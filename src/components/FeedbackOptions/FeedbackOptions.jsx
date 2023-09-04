@@ -1,15 +1,22 @@
 import { Container, FbButton } from './FeadbackOptions.styled';
 import PropTypes from 'prop-types';
 
-export function FeedbackOptions({ options, onLeaveFeedback }) {
+export function FeedbackOptions({ options, optionsHandlers }) {
   return (
     <>
       <Container>
-        {options.map(option => (
-          <FbButton key={option} type="button" onClick={()=>onLeaveFeedback(option)}>
-            {option}
-          </FbButton>
-        ))}
+        {options.map(option => {
+          const [value, setValue] = optionsHandlers[option];
+          return (
+            <FbButton
+              key={option}
+              type="button"
+              onClick={() => setValue(value + 1)}
+            >
+              {option}
+            </FbButton>
+          );
+        })}
       </Container>
     </>
   );
@@ -17,5 +24,5 @@ export function FeedbackOptions({ options, onLeaveFeedback }) {
 
 FeedbackOptions.propTypes = {
   options: PropTypes.array.isRequired,
-  onLeaveFeedback: PropTypes.func.isRequired,
+  optionsHandlers: PropTypes.object.isRequired,
 };
