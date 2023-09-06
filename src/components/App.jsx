@@ -7,21 +7,34 @@ import { Statistics } from './Statistics/Statistics';
 import { Notification } from './Notification/Notification';
 
 export function App() {
-  const good = useState(0);
-  const neutral = useState(0);
-  const bad = useState(0);
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  const optionsHandlers = {
-    good: good,
-    neutral: neutral,
-    bad: bad,
+  const options = ['good', 'neutral', 'bad'];
+
+  const feadbackHandler = option => {
+    // console.log('click');
+    switch (option) {
+      case 'good':
+        setGood(prev => prev + 1);
+        break;
+      case 'neutral':
+        setNeutral(prev => prev + 1);
+        break;
+      case 'bad':
+        setBad(prev => prev + 1);
+        break;
+      default:
+        return;
+    }
   };
 
-  const countTotalFeedback = () => good[0] + neutral[0] + bad[0];
+  const countTotalFeedback = () => good + neutral + bad;
 
   const countPositiveFeedbackPercentage = () => {
     return countTotalFeedback()
-      ? Math.round((good[0] / countTotalFeedback()) * 100)
+      ? Math.round((good / countTotalFeedback()) * 100)
       : 0;
   };
 
@@ -29,17 +42,14 @@ export function App() {
     <>
       <GlobalStyle />
       <Section title="Please leave feadback">
-        <FeedbackOptions
-          options={['good', 'neutral', 'bad']}
-          optionsHandlers={optionsHandlers}
-        />
+        <FeedbackOptions options={options} feadbackHandler={feadbackHandler} />
       </Section>
       <Section title="Statistics">
         {countTotalFeedback() ? (
           <Statistics
-            good={good[0]}
-            neutral={neutral[0]}
-            bad={bad[0]}
+            good={good}
+            neutral={neutral}
+            bad={bad}
             total={countTotalFeedback()}
             positivePercentage={countPositiveFeedbackPercentage()}
           />
